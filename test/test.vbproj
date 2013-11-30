@@ -104,9 +104,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Twitter\Twitter.vbproj">
+    <ProjectReference Include="..\Twitter\SimpleTwitter.vbproj">
       <Project>{73d3a641-e90b-4093-8b74-12af29caf189}</Project>
-      <Name>Twitter</Name>
+      <Name>SimpleTwitter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

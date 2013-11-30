@@ -1,26 +1,27 @@
 ﻿Imports LinqToTwitter
 
-Namespace Twitter
-    Public Class Twitter
+Public Class Twitter
 
-        Private twitterContext As TwitterContext
+    Private twitterContext As TwitterContext
 
-        Public Sub New(ConsumerKey As String, ConsumerSecret As String, OAuthToken As String, AccessToken As String)
+    Public Sub New(ConsumerKey As String, ConsumerSecret As String, OAuthToken As String, AccessToken As String)
 
-            ' create twitter context if it doesn't exist
-            If IsNothing(twitterContext) Then
+        ' create twitter context if it doesn't exist
+        If IsNothing(twitterContext) Then
 
-                ' set up credentials to initialize context with
-                Dim creds = New SingleUserAuthorizer With {.Credentials = New InMemoryCredentials With {.ConsumerKey = ConsumerKey, _
-                                                                                                        .ConsumerSecret = ConsumerSecret, _
-                                                                                                        .OAuthToken = OAuthToken, _
-                                                                                                        .AccessToken = AccessToken}}
-                twitterContext = New TwitterContext(creds)
-            End If
+            ' set up credentials to initialize context with
+            Dim creds = New SingleUserAuthorizer With {.Credentials = New InMemoryCredentials With {.ConsumerKey = ConsumerKey, _
+                                                                                                    .ConsumerSecret = ConsumerSecret, _
+                                                                                                    .OAuthToken = OAuthToken, _
+                                                                                                    .AccessToken = AccessToken}}
+            twitterContext = New TwitterContext(creds)
+        End If
 
-        End Sub
+    End Sub
 
-        Public Function GetTweetsByUser(userName As String) As List(Of Tweet)
+    Public Function GetTweetsByUser(userName As String) As List(Of Tweet)
+
+        Try
 
             ' linqtotwitter query to get 'statuses' (tweets) by username
             Dim tweets = (From tweet In twitterContext.Status _
@@ -40,8 +41,13 @@ Namespace Twitter
             'return list
             Return tweetList
 
-        End Function
+        Catch ex As Exception
 
-    End Class
+            Throw New Exception("Could not retrieve tweets", ex)
 
-End Namespace
+        End Try
+
+
+    End Function
+
+End Class
