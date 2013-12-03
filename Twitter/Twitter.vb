@@ -38,7 +38,7 @@ Public Class Twitter
                                               .CreatedAt = t.CreatedAt})
             Next
 
-            'return list
+            'return list of tweets
             Return tweetList
 
         Catch ex As Exception
