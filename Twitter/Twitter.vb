@@ -1,4 +1,5 @@
 ﻿Imports LinqToTwitter
+Imports System.Text.RegularExpressions
 
 Public Class Twitter
 
@@ -33,6 +34,9 @@ Public Class Twitter
 
             ' take required info from tweets
             For Each t In tweets
+
+                t.Text = AddWebAndTwitterLinks(t.Text)
+
                 tweetList.Add(New Tweet With {.Name = t.ScreenName, _
                                               .Text = t.Text, _
                                               .CreatedAt = t.CreatedAt})
@@ -49,5 +53,19 @@ Public Class Twitter
 
 
     End Function
+
+    Private Function AddWebAndTwitterLinks(input As String) As [String]
+        Dim strWebLinks As String = "(^|[\n ])([\w]+?://[\w]+[^ \n\r\t< ]*)"
+        Dim strWebLinksWWW As String = "(^|[\n ])((www|ftp)\.[^ \t\n\r< ]*)"
+        Dim strTwitterNames As String = "@(\w+)"
+        Dim strTwitterTags As String = "#(\w+)"
+        input = Regex.Replace(input, strWebLinks, " <a href=""$2"" target=""_blank"">$2</a>")
+        input = Regex.Replace(input, strWebLinksWWW, " <a href=""http://$2"" target=""_blank"">$2</a>")
+        input = Regex.Replace(input, strTwitterNames, "<a href=""http://www.twitter.com/$1"" target=""_blank"">@$1</a>")
+        input = Regex.Replace(input, strTwitterTags, "<a href=""https://twitter.com/search?q=%23$1" + "&src=hash"" target=""_blank"">#$1</a>")
+
+        Return input
+    End Function
+
 
 End Class
